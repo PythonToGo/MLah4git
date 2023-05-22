@@ -1,0 +1,258 @@
+\documentclass[
+	a4paper,
+	11pt,
+]{article}
+
+% Needed for correct typography and encoding
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Allows including graphics
+\usepackage{graphicx}
+
+% Advanced Math-Environment and symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% \usepackage{url}
+\usepackage{fancyhdr} % Import the package
+\pagestyle{fancy} % Set the page style to 'fancy'
+% Formatting from .sty file (logo in 1st page, name, page#, ...)
+
+
+% Formatting from .sty file (logo in 1st page, name, page#, ...)
+
+% Change to your Name and Semester here
+
+
+\begin{document}
+
+\fancyhf{} % Clear the header and footer
+\fancyfoot[R]{Taeyoung Kim, SS2023} % Set the content of the right foote
+% ------------------------------------------------------------------
+
+\section*{Measurement Laboratory at Home - Exercise 1}
+Student Name(s): Taeyoung Kim\\
+Term: SS2023 \\
+Date: \today
+
+
+This exercise is about getting familiar with the Discrete Fourier Transform (DFT) and its implementation. Specifically, the two-sided and single-sided spectrum will be analysed and how the latter can be extracted from the former.
+
+\\
+\section{Analyzing a Sound File}
+the sound file named \textbf{tone\_in\_noise.wav} was used. This is a very noisy sound example with a hidden burried single tone inside. First  the frequency and the amplitude of this tone was determined.
+
+\\
+\subsection{About Assignment 1 and 2}
+The goal of Assignment 1 is to process signal with some techniques and learn how to work with sound files. The topics covered in the assignment may include reading and analyzing sound files, plotting signals, calculating the single-sided amplitude spectrum using Fast Fourier Transform (FFT), and identifying pure tones hidden in noise through visual inspection of the spectrum plot.
+\\
+\subsubsection{Assignment 1}
+Read the sound file (audioread). The signal’s amplitude is given in the unit Pa, the time axis is given
+in the unit s. Plot the sound file (plot). Make sure to have correct labeling (xlabel, ylabel), scaling, as well as
+proper figure and font size.\\
+
+\begin{itemize}
+\item Plot the sound file (plot). Make sure to have correct labeling (xlabel, ylabel), scaling, as well as
+proper figure and font size.
+\item Calculate the single-sided amplitude spectrum (fft) and plot it using a log-log scale (loglog).
+\item  Determine the amplitude and frequency of the pure tone buried in the noise.
+\end{itemize}
+
+\\
+
+\begin{figure}
+  \centering 
+    \begin{tabular}{cc}
+    \includegraphics[width=0.4\textwidth]{A1/image1.jpg}&
+    \includegraphics[width=0.4\textwidth ]{A1/image2.jpg}\\
+    \includegraphics[width=0.4\textwidth ]{A1/image3.jpg}&
+    \includegraphics[width=0.4\textwidth ]{A1/image4.jpg}\\
+     \end{tabular}
+\end{figure}
+\\
+
+First image is the graph that appears when an audio file is read. Next, the double-sided amplitude spectrum was calculated using FFT(Fast-Fourier-Transformation) in order to plot the single-sided amplitude and plot it again with log-log scale.
+
+
+
+\subsubsection{Assignment 2}
+Assignment 2 is specifically focusing on the time domain analysis of sound files. Looking at the sound file in time domain, you may notice an onset and ending pause (zeros at beginning and end of the signal), now focus on the central part of the signal ([0.7s, 1.7s]) by cutting out the heading and trailing zeros in the signal vector.\\
+
+
+\begin{itemize}
+\item Determine which sample number 0.7s and 1.7s correspond to.
+\item Cut out the center part of the signal using the sample numbers.
+\item Calculate the single-sided amplitude spectrum and plot it using a log-log scale.
+
+\end{itemize}
+
+Plot the graph by setting the interval [0.7:1.7] with the xlim function. As in Task 1, first draw the double-sided amplitude to obtain the single-sided amplitude. The plotted single-sided amplitude is re-plotted on a loglog scale.
+
+\begin{figure}%
+    \centering
+    \subfloat{{\includegraphics[width=4cm]{A2/a2.image1.jpg} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=4cm]{A2/a2.image2.jpg} }}%
+    \caption{Graph of audio file and its FFT}%
+    \label{fig:example}%
+\end{figure}
+\\
+
+
+\section{Generation of a Signal}
+Throughout this section, assume a sampling frequency of \(f_s = 10240\)Hz and an FFT size of N = 1024 samples.
+
+\subsection{About Assignment 3 and 4}
+In this assignment, the goal is to create various signals with different sample sizes and analyze them using the Fourier Transformation. The purpose is to understand the benefits of using windows, identify errors that can be introduced by the DFT and windows, and learn how to correct these errors. The assignment also aims to determine the circumstances under which these errors may occur.
+\\
+
+\subsubsection{Assignment 3}
+This assignment is about generating a signal using a given time vector and calculating the single-sided amplitude spectrum of the signal on a log-log scale, changing the time vector and generating the same signal again, then comparing the single-sided amplitude.\\
+\\
+Create a time vector \(t=\frac{(0:N)}{f_s}\) and generate a signal \(u_1(t) = 0.5V + 0.1V\cdot\sin(2\pi\cdot100\text{Hz}\cdot t)\)\\
+
+\begin{itemize}
+\item Calculate and plot the single-sided amplitude spectrum of the signal \(u_1(t)\) on a log-log scale.
+\item Change the time vector to \(t = \frac{(0:N-1)}{f_s}\), generate the same signal again, and plot the single-sided amplitude spectrum of the signal on a log-log scale. Note: You may plot both spectra side by side in one single figure or in the same axis.
+\item What is the reason for the difference you observe between \textbf{3a)} and \textbf{3b})?
+\end{itemize}
+
+The figure in the next chapter is the result of plotting \(u_1(t)\) with \(u_1(t)\), single-sided amplitude and log scale according to the time domain.\\
+
+The Fast Fourier Transform (FFT) algorithm assumes that the input signal is a periodic function with a period of N samples. The time vector in the FFT represents the time domain signal and specifies the time at which each sample was recorded. To avoid spectral leakage and other artifacts in the frequency domain due to a mismatch between the input signal and the assumed periodicity of the FFT, the time vector should span exactly one period of the waveform. Therefore, the time vector is defined as \(\frac{(0:N-1)}{fs}\) instead of \(\frac{(0:N)}{fs}\) to ensure that the time interval covered by the samples is exactly one period of the waveform. This ensures accurate frequency domain analysis of the input signal.
+
+
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=18cm]{A2/a3.all.jpg}}
+\end{figure}
+
+\newpage
+
+
+\\
+\subsubsection{Assignment 4}
+Generate a signal \( u_2(t) = 0.1 V \cdot\sin(2\pi\cdot105\text{Hz}\cdot t) \)
+\\
+\begin{itemize}
+\item Calculate the root-mean-square value (rms) of the signal \(u_2(t)\).
+\item Calculate and plot the amplitude spectrum of the signal \(u_2(t)\) on a log-log scale. Determine the
+amplitude of the tone.
+\item Explain the difference between the RMS value and the amplitude value. How should they be related? Does this relation hold true for the values you got from assignment 4a) and 4b)?
+\item Calculate the maximum error of the signal amplitude you measured from the amplitude spectrum. What is the reason for this error?
+\end{itemize}
+\newpage
+
+
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=9cm]{A4/a4.image1.jpg}}
+\end{figure}
+
+In signal analysis, the root-mean-square (RMS) value is a measure of the average power of a signal over time. It is defined as the square root of the mean of the squared values of the signal. The RMS value is useful because it gives a single value that represents the overall magnitude of the signal. 
+
+The RMS value of a signal \(x(t)\) over a time interval T is given by:
+
+\begin{equation}
+RMS = \sqrt{\frac{1}{T} \int_{0}^{T} [x(t)]^2 dt}
+\end{equation}
+
+where the integral represents the average power of the signal over the time interval T. In this case the RMS value of \(u_2(t)\) is 0.0707.
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=9cm]{A4/a4.image2.jpg}}
+    \caption{amplitude spectrum and log scale of \(u_2(t)\)}
+\end{figure}
+
+The root-mean-square (RMS) value of a signal is a measure of its overall power, while the amplitude value is a measure of its maximum deviation from its mean or zero level. The RMS value is calculated by taking the square root of the mean of the squared values of the signal over a given time interval. It represents the equivalent DC voltage that would produce the same amount of power as the AC signal. On the other hand, the amplitude value is simply the maximum value of the signal. While the amplitude value can give an idea of the signal's strength, it does not provide information about the signal's power consumption. Therefore, the RMS value is a more meaningful parameter when it comes to analyzing signals in terms of their power consumption.
+
+
+
+
+\section{Windowing}
+This exercise is about getting familiar with the Discrete Fourier Transform (DFT) and its implementation. You will need the Fourier Transformation throughout this course, so it is worth it to put effort in under- standing how it is implemented, scaled, and used properly. Specifically, you should have a look at the two-sided and single-sided spectrum and how the latter can be extracted from the former.
+\\
+The use of a window in the Fourier transform introduces an amplitude error in the spectrum due to the fact that the window reduces the energy of the signal by attenuating its edges. This effect is also known as spectral leakage. The amplitude error can be corrected by multiplying the spectrum by a correction factor, which depends on the chosen window and the number of points in the FFT. The correction factor is typically computed using a calibration signal with known spectrum.
+
+The amplitude error can be quantified by the Coherent Power Gain (CPG) in dB, which is defined as the ratio of the power of the signal in the frequency domain after windowing to the power of the same signal without windowing. The CPG in dB is given by:
+
+
+\begin{equation}
+\text{CPG} = 20\log_{10} \left(\frac{N}{\sum^{N-1}_{n=0} \omega (n)}\right) \text{dB}
+\end{equation}
+where \(\omega\) is a window and \(N\) is the window length in samples.
+\\
+\\
+\subsubsection{Assignment 5}
+The task is to apply a flat top window to the signal \(u_2(t)\), correct for the resulting amplitude error using the relative area under the window, and calculate the correction factor and CPG in dB for both flat top and Hanning windows. Then, to plot the single-sided amplitude spectrum of the signal after applying the flat top window, determine the amplitude of the tone, and calculate the maximum error in the signal amplitude from the amplitude spectrum. The results will be compared to the previous assignment.\\
+\\
+Apply a flat top window (flattopwin) on the signal \(u_2 (t)\). Note that multiplication with a window function affects the signal amplitude. You have to correct for this with the relative area under the window (see Eq. 1 and 2).\\
+
+\begin{itemize}
+\item Calculate and report the window correction factor (linear) and CPG (dB) for a flat top window and a Hanning window.
+\item Calculate and plot the single-sided amplitude spectrum of the signal \(u_2(t)\) on a log-log scale after application of the flat top window. Ensure the spectrum has correct scaling.
+\item Determine the amplitude of the tone.
+\item Calculate the maximum error of the signal amplitude you measured from the amplitude spectrum. How does the error compare to your result from Assignment 4d)?
+\end{itemize}
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=9cm]{A5/answer.jpg}}
+    \caption{the result of matlab}
+\end{figure}
+
+The amplitude with a float top window is 0.046407.
+The CPG with a flat top window can be showed following images. The correction factor with hanning window is 0.37462 and the CPG with hanning window is 21.2303.
+\newpage
+
+
+\begin{figure}%[hbt!]
+    \centering
+    \subfloat{{\includegraphics[width=5cm]{A5/a5.falttopw.jpg} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=5cm]{A5/a5.cpg.jpg} }}%
+    \caption{the window correction factor and CPG for a flat top window}%
+    \label{fig:example}%
+\end{figure}
+
+\\
+\section{The Sound File Revisited and Sound playback}
+
+
+\subsubsection{Assignment 6}
+Given your knowledge now, would you revise your answer to assignment 1c)? If so, which mistakes have you made and what possible pitfalls do you have to consider when using the FFT? You do not need to recalculate your answer for 1c).\\
+
+When using the FFT, it is important to be aware of the limitations and the importance of windowing. One common mistake is to apply the FFT without using a window function, which can result in spectral leakage and poor frequency resolution. Windowing helps to mitigate these issues by reducing the effect of discontinuities at the edges of the signal. However, it is important to choose the appropriate window function and its parameters, as different window functions have different trade-offs between frequency resolution, spectral leakage, and amplitude accuracy. Another potential pitfall is the interpretation of the FFT results, as the frequency resolution and the frequency range depend on the length of the signal and the sampling rate.
+\\
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=9cm]{A67/a6.jpg}}
+    \caption{the result of matlab}
+\end{figure}
+
+\subsubsection{Assignment 7}
+Generate a signal \(u_3(t) = 0.1V*cos(2\pi*230Hz*t)\) with a duration of \(T =0.5\)s and a sampling frequency of 48kHz.\\
+\begin{itemize}
+\item Use headphones and listen to the signal \textbf{(sound)}, especially to its on- and offset. What effects do you hear?
+\item Now ramp the signal on and off over a duration of 100 ms at both ends using a Hanning window of length 200 ms. Plot the signal and listen to its on- and offset artifacts again. How have they changed compared to 7a)?
+\item Create a generally usable ramping function from assignment 7b), as you will need this method in many of the following assignments (function).
+\end{itemize}
+\\
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=7cm]{A67/a7.jpg}}
+    \caption{\(u_3(t)\)}
+\end{figure}
+
+
+
+\\
+
+a) The signal \(u_3(t)\) is a pure tone of 230Hz with an amplitude of 0.1V. When listening to the signal using headphones, there may be a slight onset and offset artifact due to the sudden start and end of the signal.\\
+\\
+\\
+b) By ramping the signal on and off using a Hanning window, the onset and offset artifacts of the signal can be reduced. The Hanning window is applied to the beginning and end of the signal over a duration of 100 ms, with a total window length of 200 ms. The window function smoothly ramps the signal up and down, which reduces the sudden changes in the amplitude that can cause onset and offset artifacts.\\
+\\
+c) To create a generally usable ramping function, we can define a Hanning window of length L and a ramp duration of d. The ramping function can then be defined as the product of the Hanning window and a ramp function that linearly ramps up from 0 to 1 over a duration of d, and then ramps down from 1 to 0 over a duration of d. This ramping function can be applied to any signal to smoothly ramp it on and off, reducing the onset and offset artifacts.
+
+
+
+\end{document}
