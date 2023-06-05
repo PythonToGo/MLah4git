@@ -1,0 +1,470 @@
+\documentclass[
+	a4paper,
+	11pt,
+]{article}
+
+% Needed for correct typography and encoding
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{siunitx,booktabs}
+
+% Allows including graphics
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{changepage}
+\usepackage{mwe}
+\renewcommand{\thesubfigure}{\alph{subfigure}}
+\newenvironment{myverbatim}%
+{\verbatim}%
+{\endverbatim}
+
+% Advanced Math-Environment and symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% \usepackage{url}
+\usepackage{fancyhdr} % Import the package
+\pagestyle{fancy} % Set the page style to 'fancy'
+% Formatting from .sty file (logo in 1st page, name, page#, ...)
+
+
+% Formatting from .sty file (logo in 1st page, name, page#, ...)
+
+% Change to your Name and Semester here
+
+\begin{document}
+
+\fancyhf{} % Clear the header and footer
+\fancyfoot[R]{Taeyoung Kim, SS2023} % Set the content of the right foote
+% ------------------------------------------------------------------
+
+\section*{Measurement Laboratory at Home - Exercise 3}
+Student Name(s)\: Taeyoung Kim\\
+Term: SS2023 \\
+Date: \today \\
+
+This report discusses the importance of measuring the frequency response of a system, specifically a passive RC-filter. By determining the system's transfer function, we can understand its behavior and calculate its response to various input signals. The report suggests using Kirchhoff's laws or Laplace transformation to calculate the transfer function and proposes using a UAI to measure the system's response at different frequencies. \\
+
+As shown in Exercise Topic 3, assume the following RC circuit. Resistor is R = 2 k\(\Omega\) and Capacitor is C = 100 \si{\nano\farad}. Assume \(i\) is the current flowing in the circuit.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A0/RCfilter.jpg}
+        \label{fig:RC_schema}
+        {{\small  Schema RC Circuit}}  
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A0/RC_breadboard.jpeg}
+        \label{fig:RC_breadboard}
+        {{\small RC Breadboard}}   
+    \end{subfigure}
+    \caption{Circuit Diagram and Breadboard of RC Circuit}
+    \label{fig:RC_shema_and_bread}
+\end{figure}
+
+\section{Assignment 1}
+\subsection{Calculate Theoretical Transfer Function of the RC Filter}
+The transfer function of a first-order RC (Resistor-Capacitor) high-pass filter can be derived using the Laplace transform. The transfer function in the frequency domain, H(f), and in the Laplace domain, H(s), are related to each other. 
+
+To express the output voltage \(u_2(t)\) using the Laplace variable s, we need to take the Laplace transform of the output voltage function in the time domain. The Laplace transform of a function u(t) is denoted by U(s). In this case, we want to find \(U_2(s)\), which represents the Laplace transform of the output voltage u2(t).
+
+
+The voltage across the resistor is:
+
+\begin{equation}
+    u_R(t) = R \cdot i(t),
+\end{equation}
+and the voltage across the capacitor is: 
+\begin{equation}
+    u_C(t) = \frac{1}{C} \int i(t) \, dt 
+\end{equation}
+where \( i(t) \) is the current flowing through the circuit.
+
+Now i have:
+\begin{equation}
+    u_1(t) = u_R(t) + u_C(t)
+\end{equation}
+\begin{equation}
+    u_1(t) = R \cdot i(t) + \frac{1}{C} \int i(t) \, dt
+\end{equation}
+
+Taking the Laplace transform of both sides.
+\begin{equation}
+    U_1(s) = I(s) \left( R + \frac{1}{Cs} \right)
+\end{equation}
+
+Then we can get the transfer function \( H(s) = \frac{U_2(s)}{U_1(s)} \):
+\begin{equation}
+    H(s) = \frac{U_2(s)}{U_1(s)} = \frac{R}{R + \frac{1}{Cs}} = \frac{RCs}{1+RCs}
+\end{equation}
+
+To get the transfer function \( H(f) \) related to frequency, \( s = j2\pi f \) can be replaced into the above equation, where \( j \) is the imaginary unit.
+\begin{equation}
+    H(f) = H(s = j2\pi f) = \frac{1}{j2\pi f R + \frac{1}{C}}
+\end{equation}
+
+Let substitute the given values and simplify it:
+\begin{equation}
+    H(s) = \frac{(2000 \, \Omega)(100 \times 10^{-9} \, \text{F})s}{1 + (2000 \, \Omega)(100 \times 10^{-9} \, \text{F})s}
+\end{equation}
+
+\begin{equation}
+    H(s) = \frac{200 \times 10^{-6}s}{1 + 200 \times 10^{-6}s}
+\end{equation}
+
+To further simplify the transfer function, we can multiply the numerator and denominator by \(10^6\) to eliminate the decimal points:
+\begin{equation}
+    H(s) = \frac{s}{5000 + s}
+\end{equation}
+
+\subsection{RC Filter}
+
+\paragraph{Type and Order of the Filter}\mbox{}\\
+This RC Filter is first ordered (passive) RC high pass filter.
+
+First of all, the passive filter consists of only passive elements like resister and capacitor. It will not use any external power source or amplification components. This RC Filter is one type of passive filter. Therefore, it is passive RC high pass filter.
+
+Second, first order high pass filter consists of only one capacitor. Thus, this type of filter has a transfer function of the first order. It means if you derive an equation in s-domain, the maximum power of ‘s’ is one. 
+
+\paragraph{Cut-off Frequency}\mbox{}\\
+The cutoff frequency is defined as a frequency that creates a boundary between pass band and stop band. For a high pass filter, if the signal frequency is more than the cutoff frequency, then it will allow passing the signal. And if the signal frequency is less than the cutoff frequency, then it will attenuate the signal.
+
+\begin{equation}
+    F_c = \frac{1}{2 \pi RC} 
+\end{equation}
+
+Substitute the value:
+\begin{equation}
+    F_c = \frac{1}{2 \pi \cdot 2000 \cdot 10^{-7}} = \frac{\pi}{10000} 
+\end{equation}
+
+The absolute of the magnitude of the transfer function is:
+\begin{equation}
+    \left| H(f) \right| = \left| \frac{1 - j \omega R C}{1 + (\omega R C)^2} \right| 
+\end{equation}
+
+To find the cutoff frequency, we need to find the value of \(\omega\) at which \(\left| H(f) \right| \) is equal to -3 dB or 0.707 (in magnitude).
+
+\paragraph{Gain & cut off frequency}\mbox{}\\
+To determine the gain of the filter, we can analyze the magnitude of the transfer function at low frequencies \((\omega\rightarrow 0)\). At low frequency the transfer function can be approximated as: \(\left| H(f) \right| \approx 1 \). Thus, the gain is approximately 1, 0 dB in low frequency. Reading from the Figure \ref{fig:A1c_end} bode plot, where the attenuation is 3 dB, the cut off frequency of the filter is approximately 796.18Hz
+
+\subsection{Bode Plot for RC Filter}
+The parameters of an RC circuit defined and calculated frequency response of the filter. The result is plotted as a Bode plot, with the magnitude shown in decibels (dB) and the phase shown in degrees.
+
+The simplified transfer Function is:
+\begin{equation}
+    H(s) = \frac{s}{s+5000}
+\end{equation}
+
+% pic
+\begin{figure}[htb!]
+    \centering
+    \begin{subfigure}[b]{0.8\textwidth}
+    \centering
+        \includegraphics[width=\textwidth]{figure/A1/a1c.jpg}
+        \label{fig:Bode_Plot}
+        {{\small Bode Plot for Magnitude and Phase}}    
+    \end{subfigure}
+    \vskip\baselineskip
+    \centering
+    \begin{subfigure}[b]{0.8\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figure/A1/a1c_tranfer_funct.jpg}
+        \label{fig:A1_transfer_func}
+        {{\small Transfer Function}}    
+    \end{subfigure}
+    \caption{Bode plot for Magnitude and Phase Transfer function of RC Circuit}
+    \label{fig:A1c_end}
+\end{figure}
+
+
+
+\section{Assignment 2}
+Now set the sampling rate at 48 kHz and the buffer size at 1024. To determine the impulse response of the RC filter, generate an impulse signal, apply it as the input $u_1$(t) to the filter and record the corresponding output, $u_2$(t).
+
+\subsection{Plot $u_1$(t) and $u_2$(t)}
+The magnitude and phase response of the filter are computed in dB and degrees, respectively. The input signal $u_1$(t) and output signal $u_2$(t) are plotted in separate subplots. This task focuses on plotting the input and output signals. The code extracts the input signal $u_1$(t) and output signal $u_2$(t) from the recorded data and plots them in separate subplots using the time vector $t_{recData}$. Figure \ref{fig:A2a} can be shown.
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=15cm]{figure/A2/2a_u1t_u2t.jpg}}
+    \caption{$u_1$(t) and $u_2$(t)}
+    \label{fig:A2a}
+\end{figure}
+
+\subsection{Single-Sided Amplitude Spectra for U1(f) and U2(f)}
+To calculate the single-sided amplitude spectra for U1(f) and U2(f) and plot them, the Fast Fourier Transform (FFT) algorithm can be used. Figure \ref{fig:A2b} can be shown.
+
+\begin{figure}[h]
+    \centerline{\includegraphics[width=11cm]{figure/A2/2b_single_sided.jpg}}
+    \caption{Single-sided amplitude spectra for U1(f) and U2(f)}
+    \label{fig:A2b}
+\end{figure}
+
+\subsection{Transfer Function H(f) and its Bode Plot}
+These tasks involve calculating and plotting the transfer function H(f) as well as creating a Bode plot to visualize the magnitude and phase response. Figure \ref{fig:A2c_bode} illustrates the Bode plot based on the calcultaed Transfer Function H(f).
+
+\begin{figure}[h]
+    \centerline{\includegraphics[width=11cm]{figure/A2/2c_bode.jpg}}
+    \caption{Bode Plot for Magnitude and Phase}
+    \label{fig:A2c_bode}
+\end{figure}
+
+\newpage
+
+\section{Assignment 3: Transfer Function from White Noise}
+This Assignment provided discusses an alternative method for finding the transfer function of a circuit using white noise. This approach involves generating zero-mean white noise with a specified range and duration. The white noise signal is then ramped on and off using a Hanning window to ensure a smooth transition. 
+
+\paragraph{Generate zero-mean white noise}
+By recording both the input $u_1$(t) and output $u_2$(t) signals simultaneously, the transfer function can be determined through spectral analysis. This method is similar to the Maximum-Length Sequence (MLS) technique, which utilizes pseudo-random binary sequences to generate signals resembling white noise in the frequency domain. 
+
+\subsection{Transfer Function with Ramp and Disturbance}
+When calculating the transfer function, it is important to exclude the ramping portions of the signal. These ramps introduce transient effects that can distort the frequency response and affect the accuracy of the transfer function estimation. To obtain a reliable and accurate representation of the system's frequency response, it is recommended to select the portion of the signal that represents the steady-state behavior, excluding the ramping regions. This ensures that the frequency response is primarily determined by the system dynamics rather than the transient effects introduced by the ramps. Therefore for our measurement we took segmented signal it the middle which represents the steady-state behavior.
+
+\subsection{Signal Selection and Single-Sided Amplitude Spectra}
+
+Figure \ref{fig:A3a} illustrates the part of the signal selected to obtain the transfer function. Subsequently, Figure \ref{fig:A3b} depicts the calculated single-sided amplitude spectra U1(f) and U2(f).
+
+\begin{figure}[h!]
+    \centerline{\includegraphics[width=12.5cm]{figure/A3/3a_u1t_u2t_seg.jpg}}
+    \caption{Part of the white noise signal selected to obtain the transfer function}
+    \label{fig:A3a}
+\end{figure}
+
+\begin{figure}[h!]
+    \centerline{\includegraphics[width=12.5cm]{figure/A3/3b_single_sided.jpg}}
+    \caption{Single-sided amplitude spectra for U1(f) and U2(f)}
+    \label{fig:A3b}
+\end{figure}
+
+\subsection{Retrieved Transfer Function from White Noise}
+Figure \ref{fig:A3c} illustrates  created Bode plot which shows magnitude as
+well as the phase of the transfer function obtained from white noise.
+
+\begin{figure}[h!]
+    \centerline{\includegraphics[width=12.5cm]{figure/A3/3c_bode.jpg}}
+    \caption{Bode plot obtained from transfer function based on white noise signal}
+    \label{fig:A3c}
+\end{figure}
+
+\newpage
+
+\section{Assignment 4 and Assignment 5}
+A common method to determine the transfer function of a circuit is to use a sweep signal, where a range of sine signals with constant amplitudes are applied to the circuit. It has two method to plot, linear and logarithmic.
+
+Assignment 4 and Assignment 5 will be solved by obtaining the transfer function of the RC circuit utilizing linear sweep signal and logarithmic sweep signal as input and output signal of the system.
+
+First, set the range for a sweep signal of frequencies from 100Hz to 24kHz. It was applied with the MATLAB function \textbf{chirp}. As above create the two channel of linear and logarithmic sweep signal.
+
+\begin{verbatim}
+#MATLAB
+%  lineare-sweep signal
+ls_start = 100;
+ls_end = 24000;
+linear_sweep = chirp(t,ls_start,T,ls_end, 'linear')';
+linear_sweep(:,2) = chirp(t,ls_start,T,ls_end, 'linear')';
+
+%  logarithmic sweep signal
+ls_start = 100;
+ls_end = 24000;
+linear_sweep = chirp(t,ls_start,T,ls_end, 'linear')';
+linear_sweep(:,2) = chirp(t,ls_start,T,ls_end, 'linear')';
+\end{verbatim}
+
+Figure \ref{fig:sweepsignal} presents the full recorded sweep signals, each obtained using linear and logarithmic method respectively.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A4/40_orig_signal.jpg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A5/50_origi_signal.jpg}
+    \end{subfigure}
+    \caption{Original Signal of linear(left) and logarithmic(right) sweep}
+    \label{fig:sweepsignal}
+\end{figure}
+
+To be more specific, we took small part of these original signals to obtain a segmented signal as follows. The segmented signals are plotted in \ref{fig:a45_seg_fig} respectively.
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A4/4a_seg.jpg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A5/5a_seg.jpg} 
+    \end{subfigure}
+    \caption{Segmented data of linear and logarithmic sweep signal}
+    \label{fig:a45_seg_fig}
+\end{figure}
+
+
+The magnitude spectrum \(\left| U_1(f) \right|\) and \(\left| U_2(f) \right|\) was calculated and plotted. And the bode plots were created. Following Figure \ref{fig:a45_mag_spectrum} and Figure \ref{fig:a45_last_fig}\\
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A5/5b_mag_spe.jpg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A5/5b_mag_spe.jpg}
+    \end{subfigure}
+    \caption{Magnitude spectrum of linear(left) and logarithmic(right) sweep signal}
+    \label{fig:a45_mag_spectrum}
+\end{figure}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A4/4c_bode.jpg}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A5/5c_bode.jpg}
+    \end{subfigure}
+    \caption{Bode plot of linear(left) and logarithmic(right) sweep signal}
+    \label{fig:a45_last_fig}
+\end{figure}
+
+Logarithmic sweeps are preferred than linear sweeps because they provide equal spacing on a logarithmic scale, cover a wide frequency range efficiently, offer higher resolution at low and high frequencies, and are effective in identifying resonances and system response peaks.
+
+\section{Assignment 6}
+First, adjust \textbf{t\_start \mbox{=} 0.4}  and \textbf{t\_stop \mbox{=} 0.4} for the \textbf{Duration T \mbox{=} 3.5}. Figure \ref{fig:6a_adjust} is depicted.
+
+
+\begin{figure}[hbt!]
+    \centerline{\includegraphics[width=10cm]{figure/A6/6a_adjust.jpg}}
+    \caption{MATLAB CODE}
+    \label{fig:6a_adjust}
+\end{figure}
+
+Here is all results of \textbf{measure\_transfer\_function\_multisine\mbox{.} m}. Figure \ref{fig:samplecode}.
+
+\begin{figure}[hbt!]
+    \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A6/play_recData.jpg}
+        \caption[Setting1]%
+        {{\small  Original Signal}}    
+        \label{fig:a6_origin_sig}
+    \end{subfigure}
+    \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A6/seg_data.jpg}
+        \caption[Setting2]%
+        {{\small Segmented Data}}    
+        \label{fig:seg_data}
+    \end{subfigure}
+    \vskip\baselineskip
+    \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A6/spectrum_seg_data.jpg}
+        \caption[Setting3]%
+        {{\small Spectrum of the segmented Data}}    
+        \label{fig:spectrum_seg_data}
+    \end{subfigure}
+    \centering
+        \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A6/channel_spectra.jpg}
+        \caption[Setting 4]%
+        {{\small Spectra of Channel 1 and 2}}   
+        \label{fig:spectrum_ch12}
+    \end{subfigure}
+    \vskip\baselineskip
+    \caption[ figure of all settings ]
+        {\small Results of \textbf{measurement\_transfser\_function\_multisine}} 
+        \label{fig:samplecode}
+\end{figure}
+
+The bode plot is created based on the transfer function calculated from  \textbf{measurement\_transfer\_function\_multisine\mbox{.}m} as below. Figure \ref{fig:a6_last_fig}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.43\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A6/trans_func.jpg}
+        \label{fig:RC_schema}
+        {{\small  Transfer Function}}  
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.43\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figure/A6/trans_func_plot.jpg}
+        \label{fig:RC_breadboard}
+        {{\small Plot of transfer function}}   
+    \end{subfigure}
+    \caption{Transfer function}
+    \label{fig:a6_last_fig}
+\end{figure}
+
+\section{Assignment 7}
+
+\subsection{Impulse Signal}
+
+\paragraph{Advantages}\mbox{}\\
+
+\begin{itemize}
+    \item Simple and direct for generation and interpretation.
+    \item Provides precise time-domain response for accurate analysis of system dynamics.
+\end{itemize}
+
+\paragraph{Disadvantages}\mbox{}\\
+
+\begin{itemize}
+    \item Limited frequency information in a single measurement.
+    \item Challenging to separate system response from noise in low signal-to-noise ratio scenarios.
+\end{itemize}
+
+\subsection{White Noise Signal}
+
+\paragraph{Advantages}\mbox{}\\
+
+\begin{itemize}
+    \item Broad frequency content allows assessment of system response across a wide spectrum.
+    \item Statistical properties can be used for estimating system characteristics.
+\end{itemize}
+
+\paragraph{Disadvantages}\mbox{}\\
+
+\begin{itemize}
+    \item Transient effects introduce challenges in separating system response from noise.
+    \item Limited frequency resolution, especially in low signal-to-noise ratio scenarios.
+\end{itemize}
+
+\subsection{Frequency Sweep Signal}
+
+\paragraph{Advantages}\mbox{}\\
+
+\begin{itemize}
+    \item Controlled frequency variation enables targeted analysis of system behavior at different frequencies.
+    \item Can help identify resonant frequencies and system response peaks.
+\end{itemize}
+
+\paragraph{Disadvantages}\mbox{}\\
+
+\begin{itemize}
+    \item Limited frequency range depending on the signal duration.
+    \item Non-stationary signal introduces challenges in accurately capturing system response at different frequencies.
+\end{itemize}
+
+
+
+\end{document}
