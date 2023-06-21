@@ -1,0 +1,336 @@
+\documentclass[
+	a4paper,
+	11pt,
+]{article}
+
+% Needed for correct typography and encoding
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{siunitx,booktabs}
+
+% Allows including graphics
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{changepage}
+\usepackage{mwe}
+\renewcommand{\thesubfigure}{\alph{subfigure}}
+\newenvironment{myverbatim}%
+{\verbatim}%
+{\endverbatim}
+
+% Advanced Math-Environment and symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% \usepackage{url}
+\usepackage{fancyhdr} % Import the package
+\pagestyle{fancy} % Set the page style to 'fancy'
+% Formatting from .sty file (logo in 1st page, name, page#, ...)
+
+
+% Formatting from .sty file (logo in 1st page, name, page#, ...)
+
+% Change to your Name and Semester here
+
+\begin{document}
+
+\fancyhf{} % Clear the header and footer
+\fancyfoot[R]{Taeyoung Kim, SS2023} % Set the content of the right foote
+% ------------------------------------------------------------------
+
+\section*{Measurement Laboratory at Home - Exercise 4}
+Student Name(s)\: Taeyoung Kim\\
+Term: SS2023 \\
+Date: \today \\
+
+The given exercise is focused on understanding the characterization of a measurement system. In the last tutorial, the transfer function of a simple filter was calculated and observed via various methods. There was a notable discrepancy between the theoretical and measured cut-off frequencies, leading to an inquiry about the cause of this difference. A potential answer to this question might lie in understanding the input and output impedances of the measurement system, primarily the UAI.
+
+In the current scenario, a two-channel system is utilized that comprises two output and two input channels, in Figure \ref{fig:RC_shema_and_bread} These channels share a common DAC (Digital to Analog Converter) for the output channels, a shared ADC (Analog to Digital Converter) for the input channels, and a shared USB interface for all channels. An important factor to consider here is the possibility of crosstalk between the channels due to these shared components.
+
+From now on, suppose the value of resistor is R = 1 k\(\Omega\) and Capacitor is C = 100 \si{\nano\farad}. Assume \(i\) is the current flowing in the circuit. The line on the breadboard are extended with an extension line.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=0.9\linewidth]{figure/A0/schemaRC.jpg}
+        {{\small  Schema RC Circuit}}  
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.47\textwidth}
+        \centering
+        \includegraphics[width=0.9\linewidth]{figure/A0/RC_Breadboard.jpg}
+        {{\small RC Breadboard}}   
+    \end{subfigure}
+    \caption{Circuit Diagram and Breadboard of RC Circuit}
+    \label{fig:RC_shema_and_bread}
+\end{figure}
+
+\section{Assignment 1}
+\subsection{Calculate Theoretical Transfer Function of the RC Filter}
+The transfer function of a second-order RC (Resistor-Capacitor) low-pass filter can be derived using the Laplace transform. The transfer function in the frequency domain, H(f), and in the Laplace domain, H(s), are related to each other. 
+
+To express the output voltage \(u_2(t)\) using the Laplace variable s, we need to take the Laplace transform of the output voltage function in the time domain. The Laplace transform of a function u(t) is denoted by U(s). In this case, we want to find \(U_2(s)\), which represents the Laplace transform of the output voltage u2(t).
+
+
+Let call the output node \(u_2(t)\) and the middle node \(u_x(s)\). In this calculating \(u_2\) are used instead of the more accurate \(u_2(s)\) :
+
+I : KCL in \(u_2\) :
+\begin{equation}
+    \frac{u_2 - u_x}{R} + s\cdot C\cdot u_2 = 0
+\end{equation}
+\begin{equation}
+    u_x = u_2 (1 + s\cdot R\cdot C)
+\end{equation}
+
+II : KCL in \(V_x\) :
+\begin{equation}
+    \frac{u_x - u_1}{R}+ \frac{u_x - u_2}{R} + s\cdot C \cdot u_x = 0
+\end{equation}
+Rearranging terms:
+\begin{equation}
+    R(u_x - u_1) + R(u_x - u_2) + s\cdot R\cdot R\cdot C\cdot u_x = 0
+\end{equation}
+Rearranging it again,
+\begin{equation}
+    u_x (R + R + s\cdot R^2 \cdot C) - R\cdot u_1 - R\cdot u_2 = 0 
+\end{equation}
+Substituting \(u_x\) with result of I:
+\begin{equation}
+    u_2 (1 + s\cdot RC)(R+R+s R^2 C) - R u_1 - R u_2 + s\cdot R^2 C u_2 = 0
+\end{equation}
+Then we can get below equation
+\begin{equation}
+    \frac{u_2}{u_1} = \frac{R}{(1+sRC)(R+R+sR^2C)- R}
+\end{equation}
+rearranging it again and cancel R:
+\begin{equation}
+    \frac{u_2}{u_1} = \frac{1}{1+3RCs + R^2C^2s^2} = H(s)
+\end{equation}
+
+Therefore, the transfer function of this RC schema is:
+\begin{equation}
+    H(s) = \frac{1}{1+3RCs + R^2C^2s^2} =  \frac{100000000}{s^2+30000s+100000000}
+\end{equation}
+
+
+\subsection{RC Filter}
+
+\paragraph{Type and Order of the Filter}\mbox{}\\
+This RC Filter is second ordered (passive) RC low pass filter.
+
+First of all, the passive filter consists of only passive elements like resister and capacitor. It will not use any external power source or amplification components. This RC Filter is one type of passive filter. Therefore, it is passive filter.
+
+Second, second-order high pass filter consists of two capacitors and two resistors. Thus, this type of filter has a transfer function of the second order. It means if you an equation are derived in s-domain, the maximum power of ‘s’ is two. 
+
+\paragraph{Passive Low Pass Filter Gain at \(f_c\)}\mbox{}\\
+The Bode Plot for the first-order low pass filter shows the Frequency Response of the filter to be nearly flat for low frequencies and all of the input signal is passed directly to the output, resulting in a gain of nearly 1, called unity, until it reaches its Cut-off Frequency. This is because the reactance of the capacitor is high at low frequencies and blocks any current flow through the capacitor. After this cut-off frequency point the response of the circuit decreases to zero at a slope of -20 \texttt{dB/Decade} \textbf{roll-off}. Note that the angle of the slope, this -20 \texttt{dB/Decade} roll-off will always be the same for any RC combination.
+
+In our situation, a second order low-pass filter is formed by connecting in cascading together a first and a second-order low pass filter.  When identical RC filter stages are cascaded together, the output gain at the required cut-off frequency \( f_c \) is attenuated) by an amount in relation to the number of filter stages used as the roll-off slope increases. And the equation for attenuation at \(f_c\) is:
+\begin{equation}
+    \Bigl( \frac{1}{\sqrt 2} \Bigl)^2
+\end{equation}
+where \(n\) is the number of filter stages.
+
+Therefore, the gain of a second-order passive low pass filter at the corner frequency ƒc will be equal to 0.7071 x 0.7071 = 0.5\(u_1\) (-6dB), The corner frequency, \(f_c\) for a second-order passive low pass filter is determined by the combination of resistors and capacitors.
+
+\paragraph{Cut-off Frequency}\mbox{}\\
+The basic equation of the second-order filter corner frequency in this situation is:
+\begin{equation}
+    f_c = \frac{1}{2 \pi \sqrt{R^2 C^2}} = \frac{5000}{\pi} = 1591.549 \mbox{Hz}
+\end{equation}
+In reality the filter stage is increased and thus its roll-off slope increases too. The low pass filters -3dB \(f_c\) point and therefore its pass band frequency changes from its original calculated value above by an amount determined by the following.
+\begin{equation}
+    f_{-3dB} = f_c \sqrt{2^{\Bigl( \frac{1}{n}\Bigl)}-1}
+\end{equation}
+
+where \(f_c\) is the calculated cut-off frequency, n is the filter order and \(f_{-3dB}\) is the new -3dB pass band frequency as a result in the increase of the filters order.
+
+\subsection{Bode Plot for RC Filter}
+The parameters of an RC circuit defined and calculated frequency response of the filter. The result is plotted as a Bode plot, with the magnitude shown in decibels (dB) and the phase shown in degrees.
+
+The simplified transfer Function is:
+\begin{equation}
+    H(s) = \frac{1}{1+3RCs + R^2C^2s^2} =  \frac{100000000}{s^2+30000s+100000000}
+\end{equation}
+
+In Figure \ref{fig:A1_Bode_loglog} and Figure \ref{fig:A1_Bode_bode} can be showed the figure of transfer function as a bode plot.
+% pic
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=13cm]{figure/A1/BodePlot_loglog.jpg}}
+    \caption{Bode Plot using \textbf{loglog} function}
+    \label{fig:A1_Bode_loglog}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=13cm]{figure/A1/BodePlot_bode.jpg}}
+    \caption{Bode plot using built-in function \textbf{bode()}}
+    \label{fig:A1_Bode_bode}
+\end{figure}
+
+
+\section{Assignment 2}
+Now set some parameters and another values.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{ c c }
+\hline
+variables & value \\
+\hline
+$\textbf{t\_start}$ & 0.5 (s) \\
+$\textbf{t\_stop}$ & 2.8 (s) \\
+$\textbf{N\_freqs}$ & 179 \\
+$\textbf{f\_start}$ & 55 (Hz) \\
+$\textbf{f\_stop}$ & 22 (kHz) \\
+\textbf{block\_size} & $2^{12}$ \\
+\textbf{ampl} & 0.1 \\
+\hline
+\end{tabular}
+\caption{A table with adjusting values.}
+\label{tab:ten-values}
+\end{table}
+
+\begin{verbatim}
+#MATLAB
+T = 3;      % Total signal duration
+t_start = 0.5;  % signal start
+t_stop=2.8;     % signal end
+
+%  Define parameters 
+N_freqs = 179;  % number of frequencies bet f_start & f_stop 
+f_start = 55;   % start frequency (Hz)
+f_stop = 22000; % stop frequency (Hz)
+block_size = 2^12;  % block size (FFT window length)
+ampl=0.1;   % select peak amplitude 
+\end{verbatim}
+
+And then, the script was run and get a bode plot of the transfer function below in Figure \ref{fig:A2_b}.
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=13cm]{figure/A2/transferfunction.jpg}}
+    \caption{Bode Plot of \textbf{measure\_tranfer\_function\_multisine.m}}
+    \label{fig:A2_b}
+\end{figure}
+
+Now, compare the measured transfer function with the calculated and theoretical bode plot. 
+For s=0 the gain is 1, then turning the excitation off , the time constant is \(\tau = \frac{1}{\omega_c}\) and \(\omega_c = \frac{1}{RC} = 10000\). This induces a pole located at \(p_1 = -607.9177\)[Hz] and  \(p_2 = -4166.7305\)[Hz]. The transfer function is thus:
+
+\begin{equation}
+    H(s)= \frac{1}{(1+\frac{s}{\omega_p1})(1+\frac{s}{\omega_p2})}
+\end{equation}
+
+
+At low frequency, the magnitude is 1 and the phase 0\(^{\circ}\). As you increase the frequency, the transfer function magnitude drops with a -1-slope (20 dB/decade) and the phase gently goes towards -90\(^{\circ}\). A pole lags the phase while a zero leads the phase. Thus, gain and cut off frequency decreases and the phase decrease very slow. Figure \ref{fig:A2_compare} shows a comparison between the calculated and theoretical transfer functions.
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=15cm]{figure/A2/compare.jpg}}
+    \caption{Comparing measured bode plot and theoretical bode plot. It is silmilar overall, but the end of the graph was affected by noise.}
+    \label{fig:A2_compare}
+\end{figure}
+
+
+\section{Determining input impedance \(Z_{in}\) of the UAI}
+To determine the input impedance (\(Z_{\text{in}}\)) of the circuit, we can neglect the output impedance (\(Z_{\text{out}}\)) and perform a measurement using a test resistor. The schematic in Figure 2 is used for this purpose, and a test resistor is connected between one output channel and one input channel. It is important to measure both voltages, \(u_1(t)\) and \(u_2(t)\), simultaneously.
+
+\subsection{The relation between \(u_1(t), u_2(t) \mbox{ and } R_\text{test} \)}
+The circuit has a test resistor \(R_\text{test}\) and an input impedance \(Z_\text{in}\) in series, with voltage with voltages \(u_1(t)\) and \(u_2(t)\) measured across \(R_\text{test}\) and \(Z_\text{in}\) respectively.  This forms a simple voltage divider network.
+
+According to Kirchhoff’s Voltage Law, the sum of the electrical potential differences (voltages) around any closed loop or mesh in a network is always equal to zero. This principle can be used to relate the voltages u1(t) and u2(t), as well as the resistances \(R_\text{test}\) and \(Z_\text{in}\).
+
+\begin{equation}
+    u_1(t) = V \cdot \frac{R_\text{test}}{R_\text{test} + Z_\text{in}}
+\end{equation}
+\begin{equation}
+    u_2(t) = V \cdot \frac{Z_\text{in}}{R_\text{test} + Z_\text{in}}
+\end{equation}
+in which, \(V\) is the total voltage in the series circuit, \(u_1(t)\) is the voltage across \(R_\text{test}\), and \(u_2(t)\) is the voltage across \(Z_\text{in}\). 
+
+
+\subsection{Plotting and mean value of impedance \(Z_{\text{in}}\)}
+
+To get the mean value for \(Z_\text{in}\), first generate a multisine signal with 179 (\textbf{N\_freqs}) frequencies between 55 Hz (\textbf{f\_start}) and 22 kHz (\textbf{f\_stop}) and set the blocksize to \(2^12\) (\textbf{block\_size}) and the amplitude to 0.1 (\textbf{ampl}). and then, conduct the measurement using \(R_\text{test} = 1 k \Omega \). Figure \ref{fig:A3_Zin_plot} is depicted the plot of \(Z_\text{in}\). 
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=14cm]{figure/A3/Zinplot.jpeg}}
+    \caption{Plotting of the impedance \(Z_\text{in}\) in \(\Omega\) over frequency}
+    \label{fig:A3_Zin_plot}
+\end{figure}
+
+The mean value for \(Z_\text{in}\) is 19.737118 \(\Omega\), (Figure \ref{fig:A3_Zin_mean_value}). It can be changed each time when the the measurement run, because of measurement noise.
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=14cm]{figure/A3/Zin_mean.jpg}}
+    \caption{mean value of the impedance \(Z_\text{in}\) in \(\Omega\) over frequency is about 19.737118 Ohms}
+    \label{fig:A3_Zin_mean_value}
+\end{figure}
+
+\section{Assignment 4 and 5: Crosstalk}
+Disconnect all channels of the UAI, first. Then generate a sine signal with a frequency of 8kHz and an amplitude
+of 0.7V for a duration T = 1s and output it on both channels. and output the signal on both channels. Then, connect a victim resistor \(R_\text{vict}1 k \Omega\) to input channel. It was set in my Breadboard. Last, record the signal on input channel 1. 
+
+\subsection{Calculating the crosstalk}
+Now, the crosstalk value can be calculated using the equation of quantitative measure of crosstalk, as below:
+
+\begin{equation}
+    CT_{oi} = -20 log_{10} \frac{A_{out}}{A_{in}}
+\end{equation}
+
+The crosstalk value is about -11 dB (Figure \ref{fig:A4_crosstalk_value}) between the open outputs and the input channel 1 and the results can potentially vary each time of measuring, even under the same conditions. 
+Also,  moving or wrapping the cables can have an influence on the crosstalk. 
+
+Below is the factors that can influence crosstalk when moving or wrapping cables:
+
+\begin{itemize}
+    \item 1. Cable proximity: The distance between cables affects electromagnetic coupling.
+    \item 2. Cable orientation: The relative orientation of cables impacts electromagnetic coupling. Twisting cables can alter coupling characteristics and potentially affect crosstalk.
+    \item 3. Cable shielding: Some cables have shielding to reduce electromagnetic interference.
+    \item 4. Cable routing: The path and proximity of cables to other electrical or magnetic sources can impact crosstalk. 
+\end{itemize}
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=7cm]{figure/A4/a4_crosstalk_value.jpg}}
+    \caption{crosstalk value between the open outputs and the input channel 1 is about -13 dB.}
+    \label{fig:A4_crosstalk_value}
+\end{figure}
+
+\subsection{Loopback channel 1}
+set all other variables and value same with above, calculating crosstalk between the open ouputs and the input channel 1. But the difference is that connecting a victim resistor \(R_{vic} = 1 k \Omega \) to \textbf{input channel 2} and now calcultaing the crosstalk \(CT_12\) in dB between \textbf{output channel 1} and \textbf{input channel 2} of the UAI.
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=7cm]{figure/A5/a5_crosstalk.jpg}}
+    \caption{crosstalk value between output channel 1 and input channel 2 of the UAI is about -52 dB.}
+    \label{fig:A5_crosstalk_value}
+\end{figure}
+The value of crosstalk between output channel 1 and input channel 2 of the UAI is about -52 dB. Figure \ref{fig:A5_crosstalk_value} is depicted the five times results of crosstalk when a victim resistor \(R_{vict} = 1k\Omega \) to input channel 2.
+
+\section{Measurement of the crosstalk \(CT_{12}\)}
+Crosstalk refers to the unwanted transfer of signals between different circuits, which is typically caused by capacitive or inductive coupling. It occurs when signals from one circuit interfere with or influence signals in another circuit. The level of crosstalk experienced varies depending on the frequency at which the circuits operate. In order to better understand and quantify this phenomenon, we will conduct measurements to determine the crosstalk, specifically the \(CT_{12}\) parameter, across a range of frequencies.
+
+First, generate a multisine signal with above \textsc{Assignment 2} and then, the  crosswalk is measured with the victim resistor \(R_{vict} = 1 k \Omega\). The results of crosstalk can potentially vary each time of measuring. As mentioned above, Crosstalk is influenced by various factors such as cable placement, electromagnetic interference, grounding, and circuit characteristics. Figure \ref{fig:A6_cross} is depicted the plotting of \(CT_{12} (f, R_{vict} = 1 k\Omega)\) in dB over frequency.
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=12cm]{figure/A67/6b_CT12_plot.jpeg}}
+    \caption{Plotting of the crosstalk \(CT_{12} (f, R_{vict}= 1k\Omega)\) in dB over freuquency. }
+    \label{fig:A6_cross}
+\end{figure}
+\newpage
+
+\section{Estimating the impact crosstalk}
+Now to estimate the impact crosstalk has on the mesurements, plot the transfer function from \textsc{Assignment 2} in the same graph as the crosstalk from \textsc{Assignment 6b}.
+
+To determine the frequency range where crosstalk dominates the measurement, we can visually inspect the plot of the transfer function and crosstalk. It is the points that has a larger magnitude compared to the transfer function curve. Frequency between 10594Hz and 22362.4 Hz is the range that the crosstalk dominates the measurement and it is marked in the Figure \ref{fig:A7_cross} 
+
+The exact frequency range where crosstalk dominates may vary depending on the specific plot, data processing and the environments like noise etc. 
+
+However, based on the graph that plotted, the frequency range can be observed where the crosstalk curve is higher than the transfer function curve.  This frequency range indicates where the impact of crosstalk on the measurement is more significant.
+
+
+\begin{figure}[htb!]
+    \centerline{\includegraphics[width=14cm]{figure/A67/a7_CT_dominates.jpeg}}
+    \caption{Plotting of the crosstalk \(CT_{12} (f, R_{vict}= 1k\Omega)\) in dB over freuquency with the transfer function. The points that has a larger magnitude compared to the transfer function curve is the range  does crosstalk dominate the measurement}
+    \label{fig:A7_cross}
+\end{figure}
+
+\end{document}
